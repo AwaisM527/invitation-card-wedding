@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Wedding Invitation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Jost:wght@300;400;500&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b2a22;
+            --bg2: #06180f;
+            --gold: #e0b862;
+            --gold2: #f6e3a8;
+            --ivory: #fbf4e3;
+            --maroon: #6e1424;
+            --maroon2: #3d0a14;
+            --marigold: #f2a321;
+            --muted: #cfc6ad;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px);
+            height: 100%
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            height: 100%;
+            background: var(--bg2);
+            color: var(--ivory);
+            font-family: 'Jost', system-ui, sans-serif;
+            overflow: hidden
+        }
+
+        #deck {
+            height: 100%;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth
+        }
+
+        .slide {
+            min-height: 100svh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 22px 56px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .slide::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: .07;
+            pointer-events: none;
+            background-image: radial-gradient(var(--gold) 1.2px, transparent 1.5px), radial-gradient(var(--gold) 1.2px, transparent 1.5px);
+            background-size: 34px 34px;
+            background-position: 0 0, 17px 17px
+        }
+
+        .day {
+            background: radial-gradient(ellipse at 50% 38%, #fffdf6 0%, #f8efd8 55%, #e6d6a8 100%);
+            padding-top: 34px
+        }
+
+        .day .urdu,
+        .day .blessing,
+        .day .hint {
+            color: #8a6a1c
+        }
+
+        .day .kicker {
+            color: #6b6350
+        }
+
+        .day .sub {
+            color: #5b5442;
+            font-size: 17px
+        }
+
+        .day .names {
+            color: #0b3d2e;
+            font-size: clamp(34px, 11vw, 50px);
+            margin: 4px 0
+        }
+
+        .day .amp {
+            color: #b08a2e
+        }
+
+        .day .orn {
+            color: #b08a2e;
+            margin: 8px 0
+        }
+
+        .day .blessing {
+            margin: 0 0 6px;
+            font-size: 17px
+        }
+
+        .day .bismillah {
+            line-height: 1.7
+        }
+
+        .couple-wrap {
+            width: min(66vw, 250px);
+            margin: 4px auto
+        }
+
+        .couple-wrap svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible
+        }
+
+        .couple {
+            animation: float 4s ease-in-out infinite
+        }
+
+        @keyframes float {
+            50% {
+                transform: translateY(-5px)
+            }
+        }
+
+        .glow {
+            animation: pulse 3.5s ease-in-out infinite
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: .45
+            }
+        }
+
+        .heart {
+            fill: #c2334d;
+            opacity: 0;
+            animation: rise 3.6s ease-in infinite
+        }
+
+        .heart:nth-of-type(2) {
+            animation-delay: 1.2s
+        }
+
+        .heart:nth-of-type(3) {
+            animation-delay: 2.4s
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(8px);
+                opacity: 0
+            }
+
+            30% {
+                opacity: 1
+            }
+
+            100% {
+                transform: translateY(-26px);
+                opacity: 0
+            }
+        }
+
+        .sp {
+            fill: #e0b862;
+            animation: tw 2.4s ease-in-out infinite
+        }
+
+        .sp:nth-of-type(2n) {
+            animation-delay: .8s
+        }
+
+        .sp:nth-of-type(3n) {
+            animation-delay: 1.5s
+        }
+
+        @keyframes tw {
+            50% {
+                opacity: .15
+            }
+        }
+
+        .petals {
+            position: absolute !important;
+            inset: 0;
+            pointer-events: none;
+            transform: none !important
+        }
+
+        .petals span {
+            position: absolute;
+            top: -24px;
+            opacity: .7;
+            animation: fall linear infinite
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg)
+            }
+        }
+
+        .slide>* {
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity .9s ease, transform .9s ease
+        }
+
+        .slide.in>* {
+            opacity: 1;
+            transform: none
+        }
+
+        .slide.in>*:nth-child(2) {
+            transition-delay: .15s
+        }
+
+        .slide.in>*:nth-child(3) {
+            transition-delay: .3s
+        }
+
+        .slide.in>*:nth-child(4) {
+            transition-delay: .45s
+        }
+
+        .slide.in>*:nth-child(5) {
+            transition-delay: .6s
+        }
+
+        .urdu {
+            font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
+            color: var(--gold);
+            line-height: 2
+        }
+
+        .bismillah {
+            font-size: clamp(22px, 6.5vw, 30px)
+        }
+
+        .blessing {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 19px;
+            color: var(--gold2);
+            margin: 6px 0 26px
+        }
+
+        .kicker {
+            letter-spacing: .32em;
+            text-transform: uppercase;
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .names {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: clamp(40px, 13vw, 60px);
+            line-height: 1.05;
+            color: var(--ivory);
+            margin: 8px 0
+        }
+
+        .names .amp {
+            display: block;
+            font-style: italic;
+            font-weight: 500;
+            color: var(--gold);
+            font-size: .55em;
+            margin: 4px 0
+        }
+
+        .orn {
+            color: var(--gold);
+            letter-spacing: .5em;
+            font-size: 14px;
+            margin: 16px 0
+        }
+
+        .sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 19px;
+            color: var(--muted);
+            max-width: 300px;
+            line-height: 1.5
+        }
+
+        .hint {
+            position: absolute !important;
+            bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%) !important;
+            font-size: 11px;
+            letter-spacing: .25em;
+            color: var(--gold);
+            text-transform: uppercase;
+            animation: bob 2s infinite
+        }
+
+        @keyframes bob {
+            50% {
+                margin-bottom: 8px
+            }
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            color: var(--gold);
+            margin-bottom: 6px
+        }
+
+        .group {
+            margin: 18px 0;
+            width: 100%;
+            max-width: 340px
+        }
+
+        .group h3 {
+            font-size: 12px;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--gold2);
+            margin-bottom: 10px;
+            font-weight: 500
+        }
+
+        .group p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            line-height: 1.55
+        }
+
+        .arch {
+            width: 100%;
+            max-width: 340px;
+            border: 1.5px solid var(--gold);
+            border-radius: 170px 170px 26px 26px;
+            padding: 46px 22px 34px;
+            background: rgba(255, 255, 255, .05);
+            box-shadow: 0 0 0 6px rgba(224, 184, 98, .12), 0 18px 50px rgba(0, 0, 0, .4)
+        }
+
+        .arch .urdu {
+            font-size: 26px;
+            line-height: 1.6
+        }
+
+        .arch h2 {
+            font-size: 40px;
+            color: var(--ivory)
+        }
+
+        .date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            color: var(--gold2);
+            margin-top: 14px
+        }
+
+        .time {
+            font-size: 14px;
+            letter-spacing: .2em;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .venue {
+            margin-top: 16px;
+            font-size: 15px;
+            line-height: 1.55;
+            color: var(--ivory)
+        }
+
+        .venue b {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            color: var(--gold)
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 26px;
+            border: 1px solid var(--gold);
+            border-radius: 40px;
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: .2em;
+            text-transform: uppercase
+        }
+
+        .btn:active {
+            background: var(--gold);
+            color: var(--bg2)
+        }
+
+        .note {
+            margin-top: 14px;
+            font-size: 13px;
+            color: var(--muted);
+            font-style: italic
+        }
+
+        .dots {
+            position: fixed;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9
+        }
+
+        .dots i {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(224, 184, 98, .35);
+            transition: .3s
+        }
+
+        .dots i.on {
+            background: var(--gold);
+            transform: scale(1.5)
+        }
+
+        .day .bismillah {
+            margin-bottom: 22px
+        }
+
+        .day .blessing {
+            margin-bottom: 12px
+        }
+
+        .day .arch {
+            background: rgba(255, 255, 255, .7);
+            border-color: #c9a23f;
+            box-shadow: 0 0 0 6px rgba(201, 162, 63, .18), 0 14px 36px rgba(120, 90, 20, .18)
+        }
+
+        .day .arch .urdu,
+        .day .date {
+            color: #8a6a1c
+        }
+
+        .day .arch h2,
+        .day .venue b {
+            color: #0b3d2e
+        }
+
+        .day .time,
+        .day .note {
+            color: #6b6350
+        }
+
+        .day .venue {
+            color: #3b3526
+        }
+
+        .day .btn {
+            color: #8a6a1c;
+            border-color: #b08a2e
+        }
+
+        .s-mehndi.night {
+            background: linear-gradient(180deg, #03140f 0%, #0a2a3a 55%, #10224f 100%)
+        }
+
+        .s-walima.night {
+            background: linear-gradient(180deg, #050a24 0%, #141a52 55%, #2a1458 100%)
+        }
+
+        .stars {
+            position: absolute !important;
+            inset: 0;
+            pointer-events: none;
+            transform: none !important;
+            z-index: 0 !important
+        }
+
+        .stars span {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #fff
+        }
+
+        @keyframes twk {
+
+            0%,
+            100% {
+                opacity: .15
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        @keyframes drift {
+            to {
+                transform: translate(-22px, 14px)
+            }
+        }
+
+        .stars i.shoot {
+            position: absolute;
+            width: 90px;
+            height: 2px;
+            background: linear-gradient(270deg, rgba(255, 255, 255, 0), #fff);
+            opacity: 0;
+            animation: shoot 9s ease-in infinite
+        }
+
+        @keyframes shoot {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) rotate(-30deg)
+            }
+
+            3% {
+                opacity: 1
+            }
+
+            12% {
+                opacity: 0;
+                transform: translate(-260px, 150px) rotate(-30deg)
+            }
+
+            100% {
+                opacity: 0
+            }
+        }
+
+        .stars b.moon {
+            position: absolute;
+            top: 26px;
+            right: 24px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            box-shadow: inset -13px -3px 0 0 #f6e3a8;
+            filter: drop-shadow(0 0 10px rgba(246, 227, 168, .55))
+        }
+
+        .blink {
+            animation: blink 5s infinite;
+            transform-box: fill-box;
+            transform-origin: center
+        }
+
+        @keyframes blink {
+
+            0%,
+            94%,
+            100% {
+                transform: scaleY(1)
+            }
+
+            97% {
+                transform: scaleY(.1)
+            }
+        }
+
+        .veil {
+            animation: vs 4s ease-in-out infinite;
+            transform-box: view-box;
+            transform-origin: 206px 40px
+        }
+
+        @keyframes vs {
+            50% {
+                transform: rotate(1.6deg)
+            }
+        }
+
+        .sway {
+            animation: sw 3.4s ease-in-out infinite;
+            transform-box: view-box;
+            transform-origin: 206px 144px
+        }
+
+        @keyframes sw {
+            50% {
+                transform: skewX(-2deg)
+            }
+        }
+
+        .bq {
+            animation: bqa 2.6s ease-in-out infinite;
+            transform-box: view-box;
+            transform-origin: 226px 214px
+        }
+
+        @keyframes bqa {
+            50% {
+                transform: rotate(8deg)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dots" id="dots"></div>
+    <main id="deck"></main>
+
+    <script>
+        /* ======== EDIT YOUR DETAILS HERE ======== */
+        const CFG = {
+            groom: "Muhammad Hamza Malik",
+            bride: "Kainat Shafique",
+            intro: "Together with their families, joyfully invite you to celebrate their wedding",
+            events: [
+                {
+                    id: "mehndi", urdu: "مہندی", name: "Mehndi", date: "November 20, Firday", time: "7:00 PM",
+                    venue: "Venue", address: "Al-Rehman Palace, Faisalabad Road", map: "", note: "Dress code: Yellow & Green"
+                },
+                {
+                    id: "baraat", urdu: "بارات", name: "Baraat", date: "November 21, Saturday", time: "Departure of Barat: 12:00 PM",
+                    venue: "Venue", address: "Old Jhumra Road, Chiniot", map: "", note: ""
+                },
+                {
+                    id: "walima", urdu: "ولیمہ", name: "Walima", date: "November 22, Sunday", time: "7:00 PM",
+                    venue: "Venue", address: "Al-Rehman Palace, Faisalabad Road", map: "", note: ""
+                }
+            ],
+            closing: "Your presence will be the greatest gift",
+            contact: "0300-7191271, 0316-7702271" // e.g. "0300-1234567" (optional)
+        };
+        /* ======================================== */
+
+        const deck = document.getElementById('deck');
+        const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+        let h = '';
+
+        h += `<section class="slide day s-hero">
+  <div class="urdu bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="blessing">Start with the blessing of Allah</div>
+  <div class="couple-wrap">
+  <svg viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg" aria-label="Bride and groom">
+    <defs>
+      <linearGradient id="gSh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#eadbb0"/></linearGradient>
+      <linearGradient id="gRd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4284a"/><stop offset="1" stop-color="#85102a"/></linearGradient>
+      <linearGradient id="gGd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8e7ae"/><stop offset="1" stop-color="#c9a23f"/></linearGradient>
+    </defs>
+    <path class="glow" d="M34 282V130Q34 14 150 14Q266 14 266 130V282Z" fill="#fff" fill-opacity=".75" stroke="#e0b862" stroke-width="3"/>
+    <path d="M46 282V132Q46 28 150 28Q254 28 254 132V282Z" fill="none" stroke="#e0b862" stroke-width="1" stroke-dasharray="3 5"/>
+    <ellipse cx="150" cy="270" rx="100" ry="9" fill="#d9c694" opacity=".6"/>
+    <g class="couple">
+      <!-- groom -->
+      <path d="M92 228V264H106V236H110V264H124V228Z" fill="#efe2c0"/>
+      <path d="M85 270Q85 261 98 261Q106 261 107 270Z M110 270Q111 261 119 261Q131 261 131 270Z" fill="#8a5a1f"/>
+      <path d="M78 112Q108 100 138 112L148 238Q108 250 68 238Z" fill="url(#gSh)" stroke="#d6b25a" stroke-width="2"/>
+      <path d="M108 106V246" stroke="#d6b25a"/>
+      <g fill="#c9a23f"><circle cx="108" cy="124" r="2.4"/><circle cx="108" cy="142" r="2.4"/><circle cx="108" cy="160" r="2.4"/><circle cx="108" cy="178" r="2.4"/><circle cx="108" cy="196" r="2.4"/></g>
+      <path d="M72 228Q108 240 144 228" stroke="#c9a23f" stroke-width="3" fill="none" stroke-dasharray="4 3"/>
+      <path d="M80 110L98 104L118 156L104 244L86 240Z" fill="#6e1424"/><path d="M86 240L104 244" stroke="#e0b862" stroke-width="3"/>
+      <path d="M74 114Q60 160 70 206L84 206Q82 160 90 120Z" fill="url(#gSh)" stroke="#d6b25a"/><circle cx="77" cy="210" r="6" fill="#e8b48a"/>
+      <path d="M134 112Q164 128 170 170L158 176Q152 144 128 130Z" fill="url(#gSh)" stroke="#d6b25a"/>
+      <rect x="101" y="94" width="14" height="14" fill="#d9a07a"/><path d="M98 108Q108 118 118 108L116 102H100Z" fill="#e0b862"/>
+      <circle cx="91" cy="84" r="3" fill="#e8b48a"/><circle cx="125" cy="84" r="3" fill="#e8b48a"/><circle cx="108" cy="82" r="17" fill="#e8b48a"/>
+      <g class="blink"><circle cx="102" cy="82" r="1.8" fill="#2a1410"/><circle cx="114" cy="82" r="1.8" fill="#2a1410"/></g>
+      <path d="M98 77Q102 75 106 77M110 77Q114 75 118 77" stroke="#2a1410" fill="none"/><path d="M102 90Q108 87 114 90" stroke="#2a1410" stroke-width="2" fill="none"/><path d="M103 94Q108 98 113 94" stroke="#9a4a3a" stroke-width="1.6" fill="none"/>
+      <path d="M86 74Q88 48 108 46Q128 48 130 74Q108 62 86 74Z" fill="url(#gGd)" stroke="#b08a2e"/>
+      <path d="M90 66Q108 54 126 66M88 71Q108 59 128 71" stroke="#b08a2e" fill="none"/><path d="M86 75Q108 66 130 75" stroke="#6e1424" stroke-width="5" fill="none"/>
+      <path d="M108 50Q100 32 114 24Q112 40 108 50Z" fill="#c2334d"/><circle cx="108" cy="52" r="3.5" fill="#fff" stroke="#c9a23f"/>
+      <!-- bride -->
+      <g class="veil"><path d="M178 84Q180 44 206 40Q232 44 234 84L254 246L158 246Z" fill="url(#gRd)" opacity=".85"/></g>
+      <g class="sway">
+        <path d="M190 144L222 144L268 268L146 268Z" fill="url(#gRd)"/>
+        <path d="M158 246Q206 258 258 246" stroke="#f0d27a" stroke-width="3" fill="none"/><path d="M168 222Q206 232 248 222" stroke="#f0d27a" stroke-width="1.5" fill="none" stroke-dasharray="3 4"/>
+        <g fill="#f0d27a"><circle cx="180" cy="236" r="3"/><circle cx="206" cy="242" r="3"/><circle cx="232" cy="236" r="3"/><circle cx="192" cy="200" r="2.5"/><circle cx="220" cy="200" r="2.5"/><circle cx="206" cy="176" r="2.5"/></g>
+        <path d="M146 268H268" stroke="#f0d27a" stroke-width="5"/>
+      </g>
+      <path d="M190 112Q206 104 222 112L224 146L188 146Z" fill="url(#gGd)" stroke="#b08a2e"/>
+      <path d="M220 114Q238 160 232 206L220 206Q222 160 214 126Z" fill="url(#gGd)" stroke="#b08a2e"/>
+      <circle cx="226" cy="210" r="6" fill="#efbd98"/>
+      <g class="bq"><path d="M226 214L224 240" stroke="#2f7d4a" stroke-width="3"/><circle cx="220" cy="212" r="6" fill="#e0476a"/><circle cx="232" cy="210" r="6" fill="#f6e3a8"/><circle cx="226" cy="204" r="6" fill="#c2334d"/><circle cx="226" cy="211" r="3" fill="#fff"/></g>
+      <path d="M192 114Q168 132 162 172L172 178Q178 144 198 126Z" fill="url(#gGd)" stroke="#b08a2e"/>
+      <path d="M160 172L170 178M158 176L168 182" stroke="#c2334d" stroke-width="3"/>
+      <circle cx="164" cy="177" r="7" fill="#e8b48a" stroke="#e0b862" stroke-width="2"/><circle cx="168" cy="175" r="5.5" fill="#efbd98"/>
+      <rect x="199" y="98" width="14" height="14" fill="#dca682"/>
+      <path d="M192 112Q206 134 220 112" stroke="#e0b862" stroke-width="3" fill="none"/><circle cx="206" cy="128" r="3" fill="#c2334d"/>
+      <circle cx="206" cy="86" r="16" fill="#efbd98"/>
+      <path d="M190 84Q192 66 206 66Q220 66 222 84Q214 74 206 74Q198 74 190 84Z" fill="#2a1410"/>
+      <path d="M184 90Q182 56 206 52Q230 56 228 90Q224 66 206 62Q188 66 184 90Z" fill="#c2334d" stroke="#e0b862" stroke-width="2"/>
+      <path d="M206 62V74" stroke="#e0b862"/><circle cx="206" cy="77" r="3" fill="#c2334d" stroke="#e0b862"/>
+      <g class="blink"><ellipse cx="200" cy="86" rx="2.4" ry="1.8" fill="#2a1410"/><ellipse cx="212" cy="86" rx="2.4" ry="1.8" fill="#2a1410"/></g>
+      <path d="M196 81Q200 79 204 81M208 81Q212 79 216 81" stroke="#2a1410" fill="none"/>
+      <circle cx="209" cy="92" r="2" fill="none" stroke="#e0b862"/><path d="M201 96Q206 100 211 96Q206 98 201 96Z" fill="#b02a3e" stroke="#b02a3e" stroke-width="1.4"/>
+      <circle cx="196" cy="94" r="3" fill="#f59ab0" opacity=".5"/><circle cx="216" cy="94" r="3" fill="#f59ab0" opacity=".5"/>
+      <circle cx="190" cy="98" r="2.5" fill="#e0b862"/><path d="M187 101H193L190 108Z" fill="#e0b862"/><circle cx="222" cy="98" r="2.5" fill="#e0b862"/><path d="M219 101H225L222 108Z" fill="#e0b862"/>
+    </g>
+    <text class="heart" x="148" y="66" font-size="16">♥</text><text class="heart" x="160" y="58" font-size="12">♥</text><text class="heart" x="154" y="72" font-size="14">♥</text>
+    <text class="sp" x="50" y="60" font-size="14">✦</text><text class="sp" x="240" y="70" font-size="12">✦</text><text class="sp" x="58" y="170" font-size="10">✦</text><text class="sp" x="238" y="150" font-size="14">✦</text><text class="sp" x="150" y="34" font-size="12">✦</text>
+  </svg>
+  </div>
+  <div class="kicker">The Wedding Of</div>
+  <div class="names">${esc(CFG.groom)}<span class="amp">&amp;</span>${esc(CFG.bride)}</div>
+  <div class="orn">❖ ❖ ❖</div>
+  <div class="sub">${esc(CFG.intro)}</div>
+  <div class="hint">Swipe up ↑</div>
+  <div class="petals"></div>
+</section>`;
+
+        CFG.events.forEach(e => {
+            h += `<section class="slide ${e.id === 'baraat' ? 'day' : 'night'} s-${e.id}">
+  <div class="kicker">You are invited to</div>
+  <div class="arch">
+    <div class="urdu">${e.urdu}</div>
+    <h2>${esc(e.name)}</h2>
+    <div class="orn">✦ ✦ ✦</div>
+    <div class="date">${esc(e.date)}</div>
+    <div class="time">${esc(e.time)}</div>
+    <div class="venue"><b>${esc(e.venue)}</b>${esc(e.address)}</div>
+    ${e.map ? `<a class="btn" href="${esc(e.map)}" target="_blank" rel="noopener">View Map</a>` : ''}
+    ${e.note ? `<div class="note">${esc(e.note)}</div>` : ''}
+  </div>
+  <div class="${e.id === 'baraat' ? 'petals' : 'stars'}"></div>
+</section>`;
+        });
+
+        h += `<section class="slide day s-end">
+  <div class="urdu bismillah">جزاک اللہ خیراً</div>
+  <div class="sub">${esc(CFG.closing)}</div>
+  <div class="orn">❖ ❖ ❖</div>
+  <div class="names" style="font-size:38px">${esc(CFG.groom)} <span class="amp" style="display:inline;font-size:.7em">&amp;</span> ${esc(CFG.bride)}</div>
+  ${CFG.contact ? `<a class="btn" href="tel:${esc(CFG.contact.replace(/[^0-9+]/g, ''))}">Call ${esc(CFG.contact)}</a>` : ''}
+  <div class="petals"></div>
+</section>`;
+
+        deck.innerHTML = h;
+
+        document.querySelectorAll('.petals').forEach(pt => {
+            for (let i = 0; i < 14; i++) {
+                const s = document.createElement('span');
+                s.textContent = i % 3 ? '✿' : '♥';
+                s.style.cssText = `left:${Math.random() * 100}%;animation-duration:${7 + Math.random() * 7}s;animation-delay:${-Math.random() * 12}s;font-size:${10 + Math.random() * 10}px;color:${i % 3 ? '#d4a93f' : '#c2334d'}`;
+                pt.appendChild(s);
+            }
+        });
+        document.querySelectorAll('.stars').forEach(st => {
+            for (let i = 0; i < 60; i++) {
+                const s = document.createElement('span'), z = 1 + Math.random() * 2.2;
+                s.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;width:${z}px;height:${z}px;animation:twk ${2 + Math.random() * 3}s ease-in-out ${-Math.random() * 5}s infinite,drift ${20 + Math.random() * 30}s linear ${-Math.random() * 30}s infinite alternate`;
+                st.appendChild(s);
+            }
+            [['10%', '3s'], ['36%', '8s']].forEach(([t, d]) => { const m = document.createElement('i'); m.className = 'shoot'; m.style.cssText = `top:${t};left:70%;animation-delay:${d}`; st.appendChild(m); });
+            const mn = document.createElement('b'); mn.className = 'moon'; st.appendChild(mn);
+        });
+
+        const slides = [...deck.querySelectorAll('.slide')];
+        const dots = document.getElementById('dots');
+        dots.innerHTML = slides.map(() => '<i></i>').join('');
+        const dEls = [...dots.children];
+        const io = new IntersectionObserver(es => es.forEach(en => {
+            if (en.isIntersecting) {
+                en.target.classList.add('in');
+                const i = slides.indexOf(en.target);
+                dEls.forEach((d, k) => d.classList.toggle('on', k === i));
+            }
+        }), { root: deck, threshold: 0.55 });
+        slides.forEach(s => io.observe(s));
+    </script>
+</body>
+
+</html>
